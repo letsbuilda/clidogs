@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["CLIDogs"];
+window.ALL_CRATES = ["CLIDogs","clidogs"];
