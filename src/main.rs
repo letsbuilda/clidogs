@@ -15,7 +15,8 @@ fn main() {
     if !matches.args_present() {
         let colors: [DynColors; 6] = [
             "#B80A41", "#4E4BA8", "#6EB122", "#DAAC06", "#00938A", "#E23838",
-        ].map(|color| color.parse().unwrap());
+        ]
+            .map(|color| color.parse().unwrap());
 
         let mut rng = rand::thread_rng();
 
