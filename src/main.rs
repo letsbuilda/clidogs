@@ -1,4 +1,4 @@
-use clap::{Command, crate_authors, crate_version};
+use clap::{crate_authors, crate_version, Command};
 
 static DOG1: &str = include_str!("./art/dog1.txt");
 
