@@ -1,3 +1,16 @@
+use clap::{Command, crate_authors, crate_version};
+
+static DOG1: &str = include_str!("./art/dog1.txt");
+
 fn main() {
-    println!("Hello, dogs!");
+    let command = Command::new("clidogs")
+        .about("∪･ω･U")
+        .version(crate_version!())
+        .author(crate_authors!("\n"));
+
+    let matches = command.get_matches();
+
+    if !matches.args_present() {
+        println!("{}", DOG1);
+    }
 }
