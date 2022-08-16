@@ -32,32 +32,64 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">crate_authors</span>, <span class="ident">crate_version</span>, <span class="ident">Command</span>};
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">builder::Arg</span>, <span class="ident">crate_authors</span>, <span class="ident">crate_version</span>, <span class="ident">Command</span>};
 <span class="kw">use</span> <span class="ident">owo_colors</span>::{<span class="ident">DynColors</span>, <span class="ident">OwoColorize</span>};
 <span class="kw">use</span> <span class="ident">rand::seq::SliceRandom</span>;
 
 <span class="kw">static</span> <span class="ident">DOG1</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;./art/dog1.txt&quot;</span>);
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
+    <span class="kw">let</span> <span class="ident">colors</span>: [<span class="ident">DynColors</span>; <span class="number">7</span>] <span class="op">=</span> [
+        <span class="string">&quot;#B80A41&quot;</span>, <span class="comment">// Red</span>
+        <span class="string">&quot;#E23838&quot;</span>, <span class="comment">// Orange</span>
+        <span class="string">&quot;#DAAC06&quot;</span>, <span class="comment">// Yellow</span>
+        <span class="string">&quot;#6EB122&quot;</span>, <span class="comment">// Green</span>
+        <span class="string">&quot;#00938A&quot;</span>, <span class="comment">// Blue</span>
+        <span class="string">&quot;#4E4BA8&quot;</span>, <span class="comment">// Indigo</span>
+        <span class="string">&quot;#BA55D3&quot;</span>, <span class="comment">// Purple</span>
+    ]
+    .<span class="ident">map</span>(<span class="op">|</span><span class="ident">color</span><span class="op">|</span> <span class="ident">color</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+
     <span class="kw">let</span> <span class="ident">command</span> <span class="op">=</span> <span class="ident">Command::new</span>(<span class="string">&quot;clidogs&quot;</span>)
         .<span class="ident">about</span>(<span class="string">&quot;∪･ω･U&quot;</span>)
         .<span class="ident">version</span>(<span class="macro">crate_version!</span>())
-        .<span class="ident">author</span>(<span class="macro">crate_authors!</span>(<span class="string">&quot;\n&quot;</span>));
+        .<span class="ident">author</span>(<span class="macro">crate_authors!</span>(<span class="string">&quot;\n&quot;</span>))
+        .<span class="ident">arg</span>(<span class="ident">Arg::new</span>(<span class="string">&quot;rainbow&quot;</span>).<span class="ident">long</span>(<span class="string">&quot;rainbow&quot;</span>))
+        .<span class="ident">arg</span>(<span class="ident">Arg::new</span>(<span class="string">&quot;random&quot;</span>).<span class="ident">long</span>(<span class="string">&quot;random&quot;</span>).<span class="ident">conflicts_with</span>(<span class="string">&quot;rainbow&quot;</span>));
+
+    <span class="kw">let</span> <span class="ident">lines</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">DOG1</span>.<span class="ident">lines</span>().<span class="ident">collect</span>();
 
     <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">get_matches</span>();
 
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">matches</span>.<span class="ident">args_present</span>() {
-        <span class="kw">let</span> <span class="ident">colors</span>: [<span class="ident">DynColors</span>; <span class="number">6</span>] <span class="op">=</span> [
-            <span class="string">&quot;#B80A41&quot;</span>, <span class="string">&quot;#4E4BA8&quot;</span>, <span class="string">&quot;#6EB122&quot;</span>, <span class="string">&quot;#DAAC06&quot;</span>, <span class="string">&quot;#00938A&quot;</span>, <span class="string">&quot;#E23838&quot;</span>,
-        ]
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">color</span><span class="op">|</span> <span class="ident">color</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
-
+    <span class="kw">if</span> <span class="ident">matches</span>.<span class="ident">contains_id</span>(<span class="string">&quot;rainbow&quot;</span>) {
+        <span class="ident">lines</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">zip</span>(<span class="ident">colors</span>.<span class="ident">iter</span>().<span class="ident">cycle</span>())
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">line</span>, <span class="ident">color</span>)<span class="op">|</span> <span class="ident">line</span>.<span class="ident">color</span>(<span class="kw-2">*</span><span class="ident">color</span>))
+            .<span class="ident">for_each</span>(<span class="op">|</span><span class="ident">line</span><span class="op">|</span> <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">line</span>));
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">matches</span>.<span class="ident">contains_id</span>(<span class="string">&quot;random&quot;</span>) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">rand::thread_rng</span>();
-
-        <span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="ident">DOG1</span>.<span class="ident">lines</span>() {
-            <span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="ident">colors</span>.<span class="ident">choose</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>).<span class="ident">unwrap</span>();
-            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">line</span>.<span class="ident">color</span>(<span class="kw-2">*</span><span class="ident">color</span>));
+        <span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="ident">lines</span> {
+            <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">line</span>.<span class="ident">color</span>(<span class="kw-2">*</span><span class="ident">colors</span>.<span class="ident">choose</span>(<span class="kw-2">&amp;mut</span> <span class="ident">rng</span>).<span class="ident">unwrap</span>()));
         }
+    } <span class="kw">else</span> {
+        <span class="ident">lines</span>.<span class="ident">iter</span>().<span class="ident">for_each</span>(<span class="op">|</span><span class="ident">line</span><span class="op">|</span> <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">line</span>));
     }
 }
 </code></pre></div>
