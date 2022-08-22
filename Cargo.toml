@@ -13,4 +13,4 @@ repository = "https://github.com/letsbuilda/clidogs"
 [dependencies]
 clap = { version = "3.2.17", features = ["cargo"] }
 rand = "0.8.5"
-owo-colors = "3.4.0"
+owo-colors = "3.5.0"
