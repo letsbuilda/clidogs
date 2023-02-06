@@ -1,0 +1,43 @@
+name: "Rust CI"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  pre-commit:
+    uses: darbiadev/.github/.github/workflows/generic-precommit.yaml@main
+
+  lint:
+    needs: pre-commit
+    uses: darbiadev/.github/.github/workflows/rust-lint.yaml@c194ec59628447c17718ee155e52060ef92dc406
+
+  clippy:
+    needs: lint
+    uses: darbiadev/.github/.github/workflows/rust-clippy.yaml@c194ec59628447c17718ee155e52060ef92dc406
+
+  test:
+    needs: clippy
+    strategy:
+      matrix:
+        triple:
+          - {
+            os: "ubuntu-latest",
+            target: "x86_64-unknown-linux-gnu",
+          }
+          - {
+            os: "macOS-latest",
+            target: "x86_64-apple-darwin",
+          }
+          - {
+            os: "windows-latest",
+            target: "x86_64-pc-windows-msvc",
+          }
+
+    uses: darbiadev/.github/.github/workflows/rust-test.yaml@c194ec59628447c17718ee155e52060ef92dc406
+    with:
+      os: ${{ matrix.triple.os }}
+      target: ${{ matrix.triple.target }}

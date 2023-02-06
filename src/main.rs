@@ -32,13 +32,15 @@ fn main() {
             .iter()
             .zip(colors.iter().cycle())
             .map(|(line, color)| line.color(*color))
-            .for_each(|line| println!("{}", line));
+            .for_each(|line| println!("{line}"));
     } else if matches.contains_id("random") {
         let mut rng = rand::thread_rng();
         for line in lines {
             println!("{}", line.color(*colors.choose(&mut rng).unwrap()));
         }
     } else {
-        lines.iter().for_each(|line| println!("{}", line));
+        for line in lines {
+            println!("{line}");
+        }
     }
 }
