@@ -13,7 +13,7 @@ pub enum ColorMode {
 /// # Returns
 ///
 /// A `clap` `Command`.
-pub fn create_command() -> Command {
+pub fn create() -> Command {
     Command::new("clidogs")
         .about("∪･ω･U")
         .version(crate_version!())
@@ -23,7 +23,7 @@ pub fn create_command() -> Command {
 }
 
 /// Returns the color mode. This assumes that the command passed is the one
-/// returned by `create_command`.
+/// returned by `create`.
 ///
 /// # Arguments
 ///

@@ -6,7 +6,7 @@ mod command;
 static DOG1: &str = include_str!("./art/dog1.txt");
 
 fn main() {
-    let command = command::create_command();
+    let command = command::create();
 
     println!(
         "{}",
