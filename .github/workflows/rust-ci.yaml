@@ -13,11 +13,11 @@ jobs:
 
   lint:
     needs: pre-commit
-    uses: darbiadev/.github/.github/workflows/rust-lint.yaml@91dda16028f109ac78016dd740206fd109740068
+    uses: darbiadev/.github/.github/workflows/rust-lint.yaml@45471b560aceda922ebec22a20b72f0c29914cad
 
   clippy:
     needs: lint
-    uses: darbiadev/.github/.github/workflows/rust-clippy.yaml@91dda16028f109ac78016dd740206fd109740068
+    uses: darbiadev/.github/.github/workflows/rust-clippy.yaml@45471b560aceda922ebec22a20b72f0c29914cad
 
   test:
     needs: clippy
@@ -37,7 +37,7 @@ jobs:
             target: "x86_64-pc-windows-msvc",
           }
 
-    uses: darbiadev/.github/.github/workflows/rust-test.yaml@91dda16028f109ac78016dd740206fd109740068
+    uses: darbiadev/.github/.github/workflows/rust-test.yaml@45471b560aceda922ebec22a20b72f0c29914cad
     with:
       os: ${{ matrix.triple.os }}
       target: ${{ matrix.triple.target }}
